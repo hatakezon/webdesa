@@ -1,21 +1,27 @@
-<?php
-// Mengambil data dari Environment Variables Vercel
-$host = getenv('DB_HOST');
-$user = getenv('DB_USER');
-$pass = getenv('DB_PASS');
-$db   = getenv('DB_NAME');
-
-// Jika variabel kosong (artinya sedang dijalankan di laptop/XAMPP), pakai settingan lokal
-if(!$host){
-    $host = 'localhost';
-    $user = 'root';
-    $pass = '';
-    $db   = 'db_desa_baru';
-}
-
-$koneksi = mysqli_connect($host, $user, $pass, $db);
-
-if(!$koneksi){
-    die("Gagal Terhubung: " . mysqli_connect_error());
-}
+<?php include 'header.php'; include 'koneksi.php'; 
+// Hitung jumlah penduduk
+$count = mysqli_num_rows(mysqli_query($koneksi, "SELECT * FROM penduduk"));
 ?>
+
+<h3>Dashboard Sistem Informasi Desa</h3>
+<p>Selamat Datang, <b><?= $_SESSION['user'] ?></b> di Panel Administrasi.</p>
+<hr>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card bg-success text-white p-4">
+            <h4>Total Warga</h4>
+            <h1 class="display-4 fw-bold"><?= $count ?></h1>
+            <p>Orang terdaftar</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-warning text-dark p-4">
+            <h4>Layanan Surat</h4>
+            <h1 class="display-4 fw-bold">Active</h1>
+            <p>Siap digunakan</p>
+        </div>
+    </div>
+</div>
+
+<?php include 'footer.php'; ?>
